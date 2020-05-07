@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Ajax</title>
+</head>
+<body>
+
+
+<div style ="color :#00FF00 ">
+
+
+    <h3>配置空间</h3>
+
+
+    <input type="button" value="获取配置文件数据" onclick="creatTab()">
+    <input type="button" value="提交数据" onclick="submit()">
+    
+    <div id="div1"></div>
+    <script type="text/javascript">
+
+		var url = 'http://192.168.1.7:8888/'+'AppCfg.txt';
+		var request ;
+		
+    	var datajson;
+		var tab='<table border=1 width=500">'
+    	
+    	
+		function display(url){
+			request = new XMLHttpRequest();    //声明一个XHR对象变量		
+			request.open('GET',url,true);               //open方法：初始化一个请求
+			request.onreadystatechange = state_Change;
+			//request.responseType = 'text';         //responseType属性:返回响应数据的类型
+			request.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+			
+			request.send();       //send方法：发送Http请求
+		
+		}   
+		function state_Change(){
+
+  				// 判断 request.readyState==4 的效果等同于 onload 
+  				if(request.readyState==4 && request.status==200)
+  				{
+  				    //para.textContent = request.responseText;
+					var jsonstr = request.responseText;
+					datajson = JSON.parse(jsonstr);
+					
+					alert(jsonstr)
+  					//window.print("some.html");  //打印
+    			
+  				}
+		}
+    	function creatTab(){
+			display(url);
+			var rows = 0;
+        	objnum = Object.keys(datajson).length;
+			alert('<1>'+objnum)
+	
+        	div1= document.getElementById('div1')
+        
+       		
+        	for(var i=0;i<objnum;i++){
+	            tab+='<tr>'
+	            for(var key in datajson[i]){
+	            	    tab+="<td style='background:green' >"+ key +"</td>"
+						tab+="<td style='background:green' >"+ datajson[i][key] +"</td>"
+						tab += '<td><input type="button" value="修改" onclick="Modify(this)" /></td></tr>'
+	            		tab+='</tr>'
+				    
+	            }
+		
+        	}  
+				
+        	tab+='</table>';
+
+        	div1.innerHTML=tab
+
+			
+    	}
+		function Modify(btn) {
+			
+        	var modify = btn.value == '修改'
+        	var tr = btn.parentNode.parentNode;
+
+		    
+        	if (modify) {
+           		 tr.cells[1].innerHTML = '<input type="text" value="' + tr.cells[1].innerHTML.replace(/"/g, '&quot;') + '"/>'
+			     
+        	}
+        	else {
+        			
+            	 tr.cells[1].innerHTML = tr.cells[1].firstChild.value.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+				 
+			
+        	}
+			alert('[LIRO-DEBUG] row = '  + tr.rowIndex);
+			alert('[LIRO-DEBUG] row = '  + tr.cells[0].innerText);
+			alert('[LIRO-DEBUG] value = ' + tr.cells[1].innerText);
+			
+        	btn.value=modify?'更新':'修改'
+
+			//update the json data
+			var row = tr.rowIndex;
+			var key = tr.cells[0].innerText;
+			datajson[row][key] = tr.cells[1].innerText;
+			
+			
+		
+    	}
+		function submit(){
+			alert(datajson[0]['name']);
+			alert(datajson[1]['data']);
+			var url = 'http://192.168.1.7:8888/';
+			var httpRequest = new XMLHttpRequest();
+			httpRequest.open('POST', url, true); 
+			httpRequest.setRequestHeader("Content-type", "application/json");
+			httpRequest.send(JSON.stringify(datajson));
+		}
+		
+    </script>
+
+		 
+
+</div>
+	
+</body>
+</html>
