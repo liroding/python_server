@@ -55,6 +55,28 @@ class HandleCfgFile():
         _fd.close()
         return jsonArr
         '''
+  def writebackcfgini(self,filename,newdata):  #newdata is list struct
+	config = ConfigObj(filename,encoding='UTF8')
+
+	for i in range(len(newdata)):
+		print(newdata[i])
+		for k,v in newdata[i].items():
+			for data in config.items():
+				_ITEM = data[0]    # [ ]
+				_arg  = data[1]
+				#print(_item)
+				#print(_arg)
+				for item in _arg:
+					if k == item:
+						print(k)
+						print(_ITEM)
+						print(config[_ITEM][k])
+						config[_ITEM][k] = v
+						config.write()
+	
+
+					
+		
 
 #自定义处理程序，用于处理HTTP请求
 class TestHTTPHandler(BaseHTTPRequestHandler):
@@ -137,6 +159,7 @@ class TestHTTPHandler(BaseHTTPRequestHandler):
   
   def outputtxt(self, path,content):
 
+       handleclass =  HandleCfgFile()
        self.send_response(200)  
        self.send_header("Content-type", "text/html")
        self.send_header("Access-Control-Allow-Origin", "*")
@@ -149,8 +172,6 @@ class TestHTTPHandler(BaseHTTPRequestHandler):
             print 'get the AppCfg.txt'
             print (PROJECT_ROOT)
 
-
-
             '''
             f = open(PROJECT_ROOT+ '/AppCfg.ini',"rb")
             for line in f.readlines():            # 输出文件内容
@@ -159,15 +180,25 @@ class TestHTTPHandler(BaseHTTPRequestHandler):
                 
             f.close()
             '''
-            handleclass =  HandleCfgFile()
             jsonStr = handleclass.tojsondata(PROJECT_ROOT+ '/hifcfg.ini')
             self.wfile.write(jsonStr)
             
             return 0
 
+       if path == '/id=1':    #app cfg submit
+            print 'submit new cfg data to hifcfg.ini'
+	    jsonobj = json.loads(content)  #string to jsonobj
+	    #print(type(jsonobj))
+	    #print(jsonobj)
 
-
-         
+	    handleclass.writebackcfgini(PROJECT_ROOT+ '/hifcfg.ini',jsonobj)
+            '''
+	    self.handleclass =  HandleCfgFile()
+            jsonStr = handleclass.tojsondata(PROJECT_ROOT+ '/hifcfg.ini')
+            self.wfile.write(jsonStr)
+            '''
+            return 0         
+	
 #       self.send_header("Content-Length", str(len(content)))  
  
        self.wfile.write('Client: %sn ' % str(self.client_address) )

@@ -16,6 +16,8 @@
 
     <input type="button" value="获取配置文件数据" onclick="creatTab()">
     <input type="button" value="提交数据" onclick="submit()">
+
+    <button id="btntb" onclick="updatejsondata()" >遍历table</button>
     
     <div id="div1"></div>
     <script type="text/javascript">
@@ -24,7 +26,7 @@
 		var request ;
 		
     	        var datajson;
-		var tab='<table border=1 width=500">'
+		var tab='<table id="cfgtable" border=1 width=500">'
     	
     	
 		function display(url){
@@ -55,7 +57,7 @@
 			display(url);
 			var rows = 0;
         	objnum = Object.keys(datajson).length;
-			alert('<1>'+objnum)
+			//alert('<1>'+objnum)
 	
         	div1= document.getElementById('div1')
         
@@ -74,51 +76,69 @@
 				
         	tab+='</table>';
 
-        	div1.innerHTML=tab
+        	div1.innerHTML= tab
 
 			
     	}
 		function Modify(btn) {
-			
+		
         	var modify = btn.value == '修改'
         	var tr = btn.parentNode.parentNode;
+	
 
-		    
         	if (modify) {
+			 
            		 tr.cells[1].innerHTML = '<input type="text" value="' + tr.cells[1].innerHTML.replace(/"/g, '&quot;') + '"/>'
+
 			     
         	}
         	else {
-        			
-            	 tr.cells[1].innerHTML = tr.cells[1].firstChild.value.replace(/</g, '&lt;').replace(/>/g, '&gt;')
-				 
-			
+ 					
+            		tr.cells[1].innerHTML = tr.cells[1].firstChild.value.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+	
         	}
-			alert('[LIRO-DEBUG] row = '  + tr.rowIndex);
-			alert('[LIRO-DEBUG] row = '  + tr.cells[0].innerText);
-			alert('[LIRO-DEBUG] value = ' + tr.cells[1].innerText);
+			//alert('[LIRO-DEBUG] row = '  + tr.rowIndex);
+			//alert('[LIRO-DEBUG] row = '  + tr.cells[0].innerText);
+			//alert('[LIRO-DEBUG] value = ' + tr.cells[1].innerText);
 			
         	btn.value=modify?'更新':'修改'
+		
 
-			//update the json data
-			var row = tr.rowIndex;
-			var key = tr.cells[0].innerText;
-			datajson[row][key] = tr.cells[1].innerText;
-			
-			
 		
     	}
+
+	
 		function submit(){
-			//alert(datajson[0]['name']);
-			//alert(datajson[1]['data']);
+
+
 			alert('submit')
-			var url = 'http://10.32.64.31:8888';
+			updatejsondata();
+			var url = 'http://10.32.64.31:8888' + '/id=1';   //app cfg submit
 			var httpRequest = new XMLHttpRequest();
 			httpRequest.open('POST', url, true); 
 			httpRequest.setRequestHeader("Content-type", "multipart/form-data");
 			//httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	
 			httpRequest.send(JSON.stringify(datajson))
+		}
+
+		function updatejsondata(){  //update the json data
+			var tb = document.getElementById('cfgtable');    // table 的 id
+			objnum = Object.keys(datajson).length;  
+			var rows = tb.rows;                           // 获取表格所有行
+			for(var i = 0; i<rows.length ; i++ ){
+   				for(var j = 0; j< 1; j++ ){    
+					for(var x=0;x<objnum;x++){
+						for(var key in datajson[x]){  //
+							if(rows[i].cells[j].innerHTML==key){
+								//alert('==')
+								datajson[x][key] = rows[i].cells[j+1].innerHTML
+								break
+							}
+						}
+					}
+   				}
+			}
 		}
 		
     </script>
