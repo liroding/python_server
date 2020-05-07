@@ -1,24 +1,27 @@
-
 <!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Ajax</title>
+<html>
+<head> 
+<meta charset="utf-8"> 
+<title>dddddddddddddd</title> 
 </head>
 <body>
 
+<div id="container" style="width:1000px">
 
-<div style ="color :#00FF00 ">
+<div id="header" style="background-color:#FFA500;">
+<h1 style="margin-bottom:0;">主要的网页标题</h1></div>
 
+<div id="menu" style="background-color:#FFD700;height:200px;width:200px;float:left;">
+<b>菜单</b><br>
+<input type="button" value="获取配置文件数据" onclick="creatTab()">
+<input type="button" value="提交数据" onclick="submit()">   
+</div>
+
+
+<div style ="color :#00FF00;">
 
     <h3>配置空间</h3>
 
-
-    <input type="button" value="获取配置文件数据" onclick="creatTab()">
-    <input type="button" value="提交数据" onclick="submit()">
-
-    <button id="btntb" onclick="updatejsondata()" >遍历table</button>
-    
     <div id="div1"></div>
     <script type="text/javascript">
 
@@ -107,7 +110,6 @@
 		
     	}
 
-	
 		function submit(){
 
 
@@ -146,6 +148,50 @@
 		 
 
 </div>
-	
+
+<div id="footer" style="background-color:#FFA500;clear:both;text-align:center;">
+APP CFG
+</div>
+
+</div>
+ 
+
+<div id="container" style="width:1000px">
+
+<div id="header" style="background-color:#FFA500;">
+<h1 style="margin-bottom:0;">主要的网页标题</h1></div>
+
+<div id="menu" style="background-color:#FFD700;height:200px;width:200px;float:left;">
+<b>菜单</b><br>
+<input type="button" value="run qemu" onclick="runqemu()">
+<input type="button" value="run dut" onclick="runsubmit()"> 
+
+<script type="text/javascript">
+function runqemu(){
+	var url = 'http://10.32.64.31:8888' + '/action=1';   //run qemu action=1
+	var httpRequest = new XMLHttpRequest();
+	httpRequest.open('POST', url, true); 
+	httpRequest.setRequestHeader("Content-type", "multipart/form-data");
+	httpRequest.send()	
+}
+function runsubmit(){
+	var url = 'http://10.32.64.31:8888' + '/action=2';   //run qemu action=2
+	var httpRequest = new XMLHttpRequest();
+	httpRequest.open('POST', url, true); 
+	httpRequest.setRequestHeader("Content-type", "multipart/form-data");
+	httpRequest.send()
+}
+</script>  
+</div>
+
+
+<div id="footer" style="background-color:#FFA500;clear:both;text-align:center;">
+APP CFG
+</div>
+
+</div>
+
+
+
 </body>
 </html>
