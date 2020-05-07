@@ -137,20 +137,20 @@ class TestHTTPHandler(BaseHTTPRequestHandler):
   
   def outputtxt(self, path,content):
 
-       form = cgi.FieldStorage(
-           fp=self.rfile,
-           headers=self.headers,           
-       )
+       self.send_response(200)  
+       self.send_header("Content-type", "text/html")
+       self.send_header("Access-Control-Allow-Origin", "*")
+       self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+       self.send_header("Access-Control-Allow-Headers", "X-Requested-With") 
+       self.end_headers()  
+
        
        if path == '/AppCfg.txt':
             print 'get the AppCfg.txt'
             print (PROJECT_ROOT)
 
 
-            self.send_response(200)  
-            self.send_header("Content-type", "text/html")
-            self.send_header("Access-Control-Allow-Origin", "*")
-            self.end_headers()  
+
             '''
             f = open(PROJECT_ROOT+ '/AppCfg.ini',"rb")
             for line in f.readlines():            # 输出文件内容
@@ -167,17 +167,9 @@ class TestHTTPHandler(BaseHTTPRequestHandler):
 
 
 
-            
-       self.send_response(200)  
-       self.send_header("Content-type", "text/html")
-       self.send_header("Access-Control-Allow-Origin", "*")
+         
 #       self.send_header("Content-Length", str(len(content)))  
-       self.end_headers()  
-       #shutil.copyfileobj(f,self.wfile)
-       self.wfile.write('nihao')
-
-
-
+ 
        self.wfile.write('Client: %sn ' % str(self.client_address) )
        self.wfile.write('User-agent: %sn' % str(self.headers['user-agent']))
        self.wfile.write('Path: %sn'%self.path)
@@ -198,7 +190,10 @@ class TestHTTPHandler(BaseHTTPRequestHandler):
         mpath,margs=urllib.splitquery(self.path)
         datas = self.rfile.read(int(self.headers['content-length']))
         self.do_action(mpath, datas)
-        
+
+
+
+
 #多线程处理
 
 class ThreadingHTTPServer(ThreadingMixIn,HTTPServer):

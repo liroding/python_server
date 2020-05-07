@@ -20,10 +20,10 @@
     <div id="div1"></div>
     <script type="text/javascript">
 
-		var url = 'http://192.168.1.7:8888/'+'AppCfg.txt';
+		var url = 'http://10.32.64.31:8888/'+'AppCfg.txt';
 		var request ;
 		
-    	var datajson;
+    	        var datajson;
 		var tab='<table border=1 width=500">'
     	
     	
@@ -109,13 +109,16 @@
 		
     	}
 		function submit(){
-			alert(datajson[0]['name']);
-			alert(datajson[1]['data']);
-			var url = 'http://192.168.1.7:8888/';
+			//alert(datajson[0]['name']);
+			//alert(datajson[1]['data']);
+			alert('submit')
+			var url = 'http://10.32.64.31:8888';
 			var httpRequest = new XMLHttpRequest();
 			httpRequest.open('POST', url, true); 
-			httpRequest.setRequestHeader("Content-type", "application/json");
-			httpRequest.send(JSON.stringify(datajson));
+			httpRequest.setRequestHeader("Content-type", "multipart/form-data");
+			//httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	
+			httpRequest.send(JSON.stringify(datajson))
 		}
 		
     </script>
