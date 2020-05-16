@@ -26,6 +26,7 @@
     <script type="text/javascript">
 
 		var url = 'http://10.32.64.31:8888/'+'AppCfg.txt';
+		//var url = 'http://192.168.1.7:8888/'+'AppCfg.txt';
 		var request ;
 		
     	        var datajson;
@@ -61,6 +62,7 @@
 			var rows = 0;
         	objnum = Object.keys(datajson).length;
 			//alert('<1>'+objnum)
+			
 	
         	div1= document.getElementById('div1')
         
@@ -70,7 +72,8 @@
 	            for(var key in datajson[i]){
 	            	    tab+="<td style='background:green' >"+ key +"</td>"
 						tab+="<td style='background:green' >"+ datajson[i][key] +"</td>"
-						tab += '<td><input type="button" value="修改" onclick="Modify(this)" /></td></tr>'
+						tab += '<td><input type="button" value="修改" onclick="Modify(this)" /></td>'
+						tab += "<td style='background:green'>"  + "<p title="+ datajson[i][key] + ">?</p>" + "</td></tr>"
 	            		tab+='</tr>'
 				    
 	            }
